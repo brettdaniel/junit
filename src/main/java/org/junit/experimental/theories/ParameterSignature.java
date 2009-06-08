@@ -41,7 +41,38 @@ public class ParameterSignature {
 	}
 
 	public boolean canAcceptType(Class<?> candidate) {
-		return type.isAssignableFrom(candidate);
+		return boxIfNeeded(type).isAssignableFrom(boxIfNeeded(candidate));
+	}
+
+	private Class<?> boxIfNeeded(Class<?> toBox) {
+		if (toBox.isPrimitive()) {
+			if (toBox == Boolean.TYPE) {
+				return Boolean.class;
+			}
+			if (toBox == Byte.TYPE) {
+				return Byte.class;
+			}
+			if (toBox == Short.TYPE) {
+				return Short.class;
+			}
+			if (toBox == Character.TYPE) {
+				return Character.class;
+			}
+			if (toBox == Integer.TYPE) {
+				return Integer.class;
+			}
+			if (toBox == Long.TYPE) {
+				return Long.class;
+			}
+			if (toBox == Double.TYPE) {
+				return Double.class;
+			}
+			if (toBox == Float.TYPE) {
+				return Float.class;
+			}
+			throw new IllegalArgumentException("Unknown primitive type: " + toBox);
+		}
+		return toBox;
 	}
 
 	public Class<?> getType() {
